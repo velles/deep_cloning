@@ -57,15 +57,15 @@ module DeepCloning
     options[:exclude] << our_foreign_key
     
     # doesn't save, only copies self's attributes
-    new_model = self.clone
+    kopy = self.clone
     
     Array(skip_attributes).each { |attribute|
       # attributes_from_column_definition is deprecated in rails > 2.3.8
-      kopy.write_attribute(attribute, attributes_from_column_definition[attribute.to_s])
+      kopy[attribute] = attributes_from_column_definition[attribute.to_s]
     } if skip_attributes
     
     # save before we need self's id for has_many / has_one relationships
-    new_model.save!
+    kopy.save!
     
     if options[:include]
       Array(options[:include]).each do |association, deep_associations|
@@ -73,26 +73,25 @@ module DeepCloning
           deep_associations = association[association.keys.first]
           association = association.keys.first
         end
-        options = defaults
-        options[:include].merge!({:include => deep_associations}) if not deep_associations.blank?
+        options[:include].merge!({:include => deep_associations.blank? {} : deep_associations})
         cloned_object = case self.class.reflect_on_association(association).macro
                         when :belongs_to, :has_one
                           ref_object = self.send(association).clone!(options)
-                          new_model.send("#{association}=", ref_object[:id])
+                          kopy.send("#{association}=", ref_object[:id])
                           ref_object
                         when :has_many, :has_and_belongs_to_many
                           self.send(association).collect { |obj| 
                             ref_object = obj.clone!(options)
-                            ref_object.send("#{our_foreign_key}=", new_model[:id]) if ref_object
+                            ref_object.send("#{our_foreign_key}=", kopy[:id]) if ref_object
                             ref_object
                           }
                         end
-        new_model.send("#{association}=", cloned_object)
+        kopy.send("#{association}=", cloned_object)
       end
     end
     
-    new_model.save!
+    kopy.save!
     
-    return new_model
+    return kopy
   end
 end
