@@ -79,12 +79,15 @@ module DeepCloning
                         when :belongs_to, :has_one
                           ref_object = self.send(association).clone!(options)
                           new_model.send("#{association}=", ref_object[:id])
+                          ref_object
                         when :has_many, :has_and_belongs_to_many
                           self.send(association).collect { |obj| 
                             ref_object = obj.clone!(options)
                             ref_object.send("#{our_foreign_key}=", new_model[:id]) if ref_object
+                            ref_object
                           }
                         end
+        new_model.send("#{association}=", cloned_object)
       end
     end
     
