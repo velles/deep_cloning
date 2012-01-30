@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "about.yml",
-     "deep_cloning-0.2.0.gem",
      "deep_cloning.gemspec",
      "lib/deep_cloning.rb",
      "test/database.yml",
