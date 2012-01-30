@@ -59,6 +59,10 @@ module DeepCloning
     # doesn't save, only copies self's attributes
     kopy = self.clone
     
+    if kopy.respond_to?("#{options[:previous_version_attr]}=")
+      kopy.send("#{options[:previous_version_attr]}=", self)
+    end
+    
     Array(skip_attributes).each { |attribute|
       # attributes_from_column_definition is deprecated in rails > 2.3.8
       kopy[attribute] = attributes_from_column_definition[attribute.to_s]
@@ -73,6 +77,7 @@ module DeepCloning
           deep_associations = association[association.keys.first]
           association = association.keys.first
         end
+        
         options[:include].merge!({:include => deep_associations.blank? {} : deep_associations})
         cloned_object = case self.class.reflect_on_association(association).macro
                         when :belongs_to, :has_one
@@ -95,3 +100,4 @@ module DeepCloning
     return kopy
   end
 end
+ActiveRecord::Base.instance_eval { include DeepCloning }
