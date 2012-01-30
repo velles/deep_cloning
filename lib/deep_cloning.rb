@@ -30,22 +30,22 @@
 # preforms a recursive deep_copy / clone on an object, saving referenced models as the "stack" unfolds
 module DeepCloning
   def self.included(base) #:nodoc:
-    base.alias_method_chain :deep_cloning
   end
 
   # @param [Hash] options 
-  # defaults = {:exclude => [:updated_at, :created_at, :id], 
-  #            :shallow => [],
+  # defaults = {:except => [:updated_at, :created_at, :id], 
   #            :include => []}
   #   :udated_at, :created_at and :id will always be in the exclude array, 
   #       even if a :exclude is passed through the formal parameter options
   #
   # @return [ActiveRecord::Base] the Object that was cloned
   def clone!(options = {})
-    defaults = {:exclude => [:updated_at, :created_at, :id], 
+    defaults = {:except => [:updated_at, :created_at, :id], 
                 :include => []}
-                
-    options[:exclude] += defaults[:exclude] if options[:exclude]
+    
+    exceptions = Array(options[:except])
+    exceptions.insert(0, defaults[:except]) if options[:except]
+    
     options = defaults.merge(options)
     our_foreign_key = self.class.to_s.foreign_key 
     
@@ -54,7 +54,7 @@ module DeepCloning
     # list of associations to copy
     associations = options[:include] or false 
     # add current class to exclusions to prevent infinite loop
-    options[:exclude] << our_foreign_key
+    exceptions << our_foreign_key
     
     # doesn't save, only copies self's attributes
     kopy = self.clone
@@ -78,7 +78,7 @@ module DeepCloning
           association = association.keys.first
         end
         
-        options[:include].merge!({:include => deep_associations.blank? {} : deep_associations})
+        options.merge!({:include => deep_associations.blank? ? {} : deep_associations})
         cloned_object = case self.class.reflect_on_association(association).macro
                         when :belongs_to, :has_one
                           ref_object = self.send(association).clone!(options)

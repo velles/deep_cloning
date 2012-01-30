@@ -20,11 +20,11 @@ context "Deep Cloning" do
 
   context "setting the :previous_version_attr" do
     setup do
-      @jack.clone(:include => :mateys,
+      @jack.clone!(:include => :mateys,
                   :previous_version_attr => :parent)
     end
 
-    should "set the :previous_version_attr to the thing being cloned" do
+    should "set the :previous_version_attr to the thing being clone!d" do
       topic.parent == @jack
     end
 
@@ -36,27 +36,27 @@ context "Deep Cloning" do
 
   context "excluding a single attribute" do
     setup do
-      @jack.clone(:except => :name)
+      @jack.clone!(:except => :name)
     end
 
-    should "not clone that attribute" do
+    should "not clonethat attribute" do
       topic.name
     end.equals(nil)
   end
  
   context "excluding multiple attributes" do
     setup do
-      @jack.clone(:except => [:name, :nick_name])
+      @jack.clone!(:except => [:name, :nick_name])
     end
 
-    should "not clone any of the attributes" do
+    should "not cloneany of the attributes" do
       topic.attributes.slice(:name, :nick_name).any?
     end.equals(false)
   end 
 
   context "including one association" do
     setup do
-      @jack.clone(:include => :mateys)
+      @jack.clone!(:include => :mateys)
     end
 
     should "have the same number of associated objects" do
@@ -66,7 +66,7 @@ context "Deep Cloning" do
 
   context "including more than one association" do
     setup do
-      @jack.clone(:include => [:mateys, :treasures])
+      @jack.clone!(:include => [:mateys, :treasures])
     end
 
     should "have the same number of objects in each association" do
@@ -77,11 +77,11 @@ context "Deep Cloning" do
 
   context "deep association includes" do
     setup do
-      clone = @jack.clone(:include => {:treasures => :gold_pieces})
+      clone= @jack.clone!(:include => {:treasures => :gold_pieces})
       clone.save && clone.reload
     end
 
-    should "clone all the way down" do
+    should "cloneall the way down" do
       topic.treasures.size   == @jack.treasures.size and
       topic.gold_pieces.size == @jack.gold_pieces.size
     end
@@ -89,11 +89,11 @@ context "Deep Cloning" do
   
   context "multiple deep association includes" do
     setup do
-      clone = @jack.clone(:include => {:treasures => :gold_pieces, :mateys => {}})
+      clone= @jack.clone!(:include => {:treasures => :gold_pieces, :mateys => {}})
       clone.save && clone.reload
     end
 
-    should "clone all listed associations" do
+    should "cloneall listed associations" do
       topic.treasures.size   == @jack.treasures.size and
       topic.gold_pieces.size == @jack.gold_pieces.size and
       topic.mateys.size      == @jack.mateys.size
@@ -102,11 +102,11 @@ context "Deep Cloning" do
 
   context "multiple deep associations specified with an array" do
     setup do
-      clone = @jack.clone(:include => [{:treasures => :gold_pieces}, :mateys])
+      clone= @jack.clone!(:include => [{:treasures => :gold_pieces}, :mateys])
       clone.save && clone.reload
     end
 
-    should "clone all listed associations" do
+    should "cloneall listed associations" do
       topic.treasures.size   == @jack.treasures.size and
       topic.gold_pieces.size == @jack.gold_pieces.size and
       topic.mateys.size      == @jack.mateys.size
@@ -116,7 +116,7 @@ context "Deep Cloning" do
 
   context "deep copying a has_one association" do
     setup do
-      clone = @jack.clone(:include => :parrot)
+      clone = @jack.clone!(:include => :parrot)
       clone.save && clone.reload
     end
     should "create a new object" do
