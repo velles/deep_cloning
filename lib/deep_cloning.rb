@@ -29,9 +29,6 @@
 #
 # preforms a recursive deep_copy / clone on an object, saving referenced models as the "stack" unfolds
 module DeepCloning
-  def self.included(base) #:nodoc:
-  end
-
   # @param [Hash] options 
   # defaults = {:except => [:updated_at, :created_at, :id], 
   #            :include => []}
