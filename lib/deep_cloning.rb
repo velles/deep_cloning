@@ -1,3 +1,4 @@
+require ActiveRecord
 # DeepCloning
 #
 # clones an ActiveRecord model. 
