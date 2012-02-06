@@ -1,4 +1,4 @@
-require ActiveRecord
+require "ActiveRecord"
 # DeepCloning
 #
 # clones an ActiveRecord model. 
@@ -30,10 +30,6 @@ require ActiveRecord
 #
 # preforms a recursive deep_copy / clone on an object, saving referenced models as the "stack" unfolds
 module DeepCloning
-  def self.included(base)
-    base.extend ClassMethods
-  end
-   
   # @param [Hash] options 
   # defaults = {:except => [:updated_at, :created_at, :id], 
   #            :include => []}
@@ -104,7 +100,4 @@ module DeepCloning
     return kopy
   end
 end
-
-class ActiveRecord::Base
-  include Uniquify
-end
+ActiveRecord::Base.extend(DeepCloning)
