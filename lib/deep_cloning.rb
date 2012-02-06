@@ -29,6 +29,10 @@
 #
 # preforms a recursive deep_copy / clone on an object, saving referenced models as the "stack" unfolds
 module DeepCloning
+  def self.included(base)
+    base.extend ClassMethods
+  end
+   
   # @param [Hash] options 
   # defaults = {:except => [:updated_at, :created_at, :id], 
   #            :include => []}
@@ -99,4 +103,7 @@ module DeepCloning
     return kopy
   end
 end
-ActiveRecord::Base.instance_eval { include DeepCloning }
+
+class ActiveRecord::Base
+  include Uniquify
+end
