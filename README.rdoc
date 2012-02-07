@@ -9,20 +9,47 @@ Install with:
 
 == Example
 
+=== Arguments / Defaults
+	ar_object.clone!(
+		:include => [],
+		:except => [:created_at, :updated_at, :id],
+		:force => [], # not yet implemented
+		:remap => [] # not yet implemented
+	)
+
 === Cloning a model without an attribute
-   pirate.clone :except => :name
+   pirate.clone!(:except => :name)
  
 === Cloning a model without multiple attributes
-   pirate.clone :except => [:name, :nick_name]
+   pirate.clone!(:except => [:name, :nick_name])
 === Cloning one single association
-   pirate.clone :include => :mateys
+   pirate.clone!(:include => :mateys)
 
 === Cloning multiple associations
-   pirate.clone :include => [:mateys, :treasures]
+   pirate.clone!(:include => [:mateys, :treasures])
 
 === Cloning really deep
-   pirate.clone :include => {:treasures => :gold_pieces}
+   pirate.clone!(:include => {:treasures => :gold_pieces})
 
 === Cloning really deep with multiple associations
-   pirate.clone :include => [:mateys, {:treasures => :gold_pieces}]
-Copyright (c) 2008 Jan De Poorter, released under the MIT license
+   pirate.clone!(:include => [:mateys, {:treasures => :gold_pieces}])
+
+== To-Do
+
+=== The forcing of certain attributes
+	pirate.clone!(:force => [
+		{:pirate => {:name => "Señor Jack"},
+		 :parrot => {:type => "eagle"}
+		}
+	])
+
+=== Re-Mapping of attributes and objects
+	Handy for mutating objects that may have the same parent class.. or are just really similar
+	pirate.clone!(:remap => [
+		{:pirate => [:red_coat, {:pirate_attr => :red_cout_attr}]
+		 :parrot => [:ostrich. {:parrot_attr => :ostrich_attr}]
+		}
+	])
+
+Originally Copyright (c) 2008 Jan De Poorter, released under the MIT license
+--> https://github.com/openminds/deep_cloning
