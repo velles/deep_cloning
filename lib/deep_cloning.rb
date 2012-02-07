@@ -41,13 +41,13 @@ module DeepCloning
                 :include => []}
 
     exceptions = Array(options[:except])
-    exceptions.insert(0, defaults[:except]) if options[:except]
-
+    exceptions.concat(defaults[:except]) if options[:except]
+    exceptions.uniq!
+    
     options = defaults.merge(options)
     our_foreign_key = self.class.to_s.foreign_key 
-
     # attributes not to clone at all
-    skip_attributes = options[:exclude] or false 
+    skip_attributes = options[:except] or false 
     # list of associations to copy
     associations = options[:include] or false 
     # add current class to exclusions to prevent infinite loop
@@ -66,7 +66,7 @@ module DeepCloning
     } if skip_attributes
 
     # save before we need self's id for has_many / has_one relationships
-    kopy.save!
+    kopy.save_with_validation(false)
 
     if options[:include]
       Array(options[:include]).each do |association, deep_associations|
@@ -74,10 +74,12 @@ module DeepCloning
           deep_associations = association[association.keys.first]
           association = association.keys.first
         end
-
+        
         options.merge!({:include => deep_associations.blank? ? {} : deep_associations})
+        options[:except].uniq!
+
         reflected_association = self.class.reflect_on_association(association)
-        throw "invalid association" if reflected_association.nil?
+        next if reflected_association.nil?
         cloned_object = case reflected_association.macro
                         when :belongs_to, :has_one
                           ref_object = self.send(association).clone!(options)
@@ -90,14 +92,14 @@ module DeepCloning
                             ref_object
                           }
                         end
+                                       
         kopy.send("#{association}=", cloned_object)
       end
     end
 
-    kopy.save!
-
+    kopy.save_with_validation(false)
     return kopy
   end
 end
-require "ActiveRecord"
+require "active_record"
 ActiveRecord::Base.send(:include, DeepCloning)
