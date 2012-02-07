@@ -99,4 +99,5 @@ module DeepCloning
     return kopy
   end
 end
+require "ActiveRecord"
 ActiveRecord::Base.send(:include, DeepCloning)
