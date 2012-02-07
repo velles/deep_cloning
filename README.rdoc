@@ -1,11 +1,12 @@
-= Deep Cloning Plugin
+= Deep Cloning Gem
 
-This plugin gives every ActiveRecord::Base object the possibility to do a deep clone.
+This gem gives every ActiveRecord::Base object the possibility to do a deep clone -- saving the cloned object(s) as it recurses.
 
-Repository is on github: http://github.com/DefV/deep_cloning/tree/master
 
-Install with:
-  script/plugin install git://github.com/DefV/deep_cloning.git
+Put this in your Gemfile to install:
+    gem "deep_cloning", :git => "git://github.com/DerNalia/deep_cloning.git"
+
+
 
 == Example
 
