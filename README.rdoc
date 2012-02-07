@@ -10,12 +10,12 @@ Install with:
 == Example
 
 === Arguments / Defaults
-	ar_object.clone!(
-		:include => [],
-		:except => [:created_at, :updated_at, :id],
-		:force => [], # not yet implemented
-		:remap => [] # not yet implemented
-	)
+    ar_object.clone!(
+        :include => [],
+        :except => [:created_at, :updated_at, :id],
+        :force => [], # not yet implemented
+        :remap => [] # not yet implemented
+    )
 
 === Cloning a model without an attribute
    pirate.clone!(:except => :name)
@@ -37,19 +37,20 @@ Install with:
 == To-Do
 
 === The forcing of certain attributes
-	pirate.clone!(:force => [
-		{:pirate => {:name => "Señor Jack"},
-		 :parrot => {:type => "eagle"}
-		}
-	])
+    pirate.clone!(:force => [
+        {:pirate => {:name => "Señor Jack"},
+         :parrot => {:type => "eagle"}
+        }
+    ])
 
 === Re-Mapping of attributes and objects
-	Handy for mutating objects that may have the same parent class.. or are just really similar
-	pirate.clone!(:remap => [
-		{:pirate => [:red_coat, {:pirate_attr => :red_cout_attr}]
-		 :parrot => [:ostrich. {:parrot_attr => :ostrich_attr}]
-		}
-	])
+Handy for mutating objects that may have the same parent class.. or are just really similar
 
-Originally Copyright (c) 2008 Jan De Poorter, released under the MIT license
+    pirate.clone!(:remap => [
+        {:pirate => [:red_coat, {:pirate_attr => :red_cout_attr}]
+         :parrot => [:ostrich. {:parrot_attr => :ostrich_attr}]
+        }
+    ])
+
+Originally Copyright (c) 2008 Jan De Poorter, released under the MIT license  
 --> https://github.com/openminds/deep_cloning
