@@ -53,4 +53,5 @@ Handy for mutating objects that may have the same parent class.. or are just rea
     ])
 
 Originally Copyright (c) 2008 Jan De Poorter, released under the MIT license  
+
 --> https://github.com/openminds/deep_cloning
