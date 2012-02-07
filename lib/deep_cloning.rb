@@ -1,4 +1,3 @@
-require "ActiveRecord"
 # DeepCloning
 #
 # clones an ActiveRecord model. 
@@ -100,4 +99,4 @@ module DeepCloning
     return kopy
   end
 end
-ActiveRecord::Base.extend(DeepCloning)
+ActiveRecord::Base.send(:include, DeepCloning)
