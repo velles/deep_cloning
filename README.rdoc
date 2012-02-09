@@ -4,7 +4,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 
 Put this in your Gemfile to install:
-    gem "deep_cloning", :git => "git://github.com/DerNalia/deep_cloning.git"
+    gem "deep_cloning", :git => "git://github.com/velles/deep_cloning.git"
 
 
 
