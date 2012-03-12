@@ -60,11 +60,11 @@ module DeepDup
     if kopy.respond_to?("#{options[:previous_version_attr]}=")
       kopy.send("#{options[:previous_version_attr]}=", self)
     end
-
+    
     Array(skip_attributes).each { |attribute|
       # attributes_from_column_definition is deprecated in rails > 2.3.8
-      kopy[attribute] = attributes_from_column_definition[attribute.to_s]
-    } if skip_attributes
+      kopy[attribute] = self.class.column_defaults.dup[attribute.to_s]
+    } 
 
     if options[:include]
       Array(options[:include]).each do |association, deep_associations|
