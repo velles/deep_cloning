@@ -1,4 +1,4 @@
-= Deep Cloning Gem
+= Deep Duplicating Gem
 
 This gem gives every ActiveRecord::Base object the possibility to do a deep clone -- saving the cloned object(s) as it recurses.
 
@@ -11,34 +11,35 @@ Put this in your Gemfile to install:
 == Example
 
 === Arguments / Defaults
-    ar_object.clone!(
+    ar_object.deep_dup(
         :include => [],
         :except => [:created_at, :updated_at, :id],
         :force => [], # not yet implemented
         :remap => [] # not yet implemented
     )
 
-=== Cloning a model without an attribute
-   pirate.clone!(:except => :name)
+=== Duplicating a model without an attribute
+   pirate.deep_dup(:except => :name)
  
-=== Cloning a model without multiple attributes
-   pirate.clone!(:except => [:name, :nick_name])
-=== Cloning one single association
-   pirate.clone!(:include => :mateys)
+=== Duplicating a model without multiple attributes
+   pirate.deep_dup(:except => [:name, :nick_name])
 
-=== Cloning multiple associations
-   pirate.clone!(:include => [:mateys, :treasures])
+=== Duplicating one single association
+   pirate.deep_dup(:include => :mateys)
 
-=== Cloning really deep
+=== Duplicating multiple associations
+   pirate.deep_dup(:include => [:mateys, :treasures])
+
+=== Duplicating really deep
    pirate.clone!(:include => {:treasures => :gold_pieces})
 
-=== Cloning really deep with multiple associations
-   pirate.clone!(:include => [:mateys, {:treasures => :gold_pieces}])
+=== Duplicating really deep with multiple associations
+   pirate.deep_dup(:include => [:mateys, {:treasures => :gold_pieces}])
 
 == To-Do
 
 === The forcing of certain attributes
-    pirate.clone!(:force => [
+    pirate.deep_dup(:force => [
         {:pirate => {:name => "Señor Jack"},
          :parrot => {:type => "eagle"}
         }
@@ -47,7 +48,7 @@ Put this in your Gemfile to install:
 === Re-Mapping of attributes and objects
 Handy for mutating objects that may have the same parent class.. or are just really similar
 
-    pirate.clone!(:remap => [
+    pirate.deep_dup(:remap => [
         {:pirate => [:red_coat, {:pirate_attr => :red_cout_attr}]
          :parrot => [:ostrich. {:parrot_attr => :ostrich_attr}]
         }
