@@ -48,7 +48,7 @@ module DeepDup
     options = defaults.merge(options)
     our_foreign_key = self.class.to_s.foreign_key 
     # attributes not to clone at all
-    skip_attributes = options[:except] or false 
+    skip_attributes = options[:except].dup or false 
     # list of associations to copy
     associations = options[:include] or false 
     # add current class to exclusions to prevent infinite loop
